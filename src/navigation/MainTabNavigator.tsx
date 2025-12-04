@@ -56,32 +56,38 @@ const FloatingActionMenu: React.FC<{
             Quick Actions
           </Typography>
           
-          <Button variant="primary" size="md" fullWidth style={fabStyles.action}>
-            <Ionicons name="add-circle-outline" size={20} color={colors.background} />
+          <Pressable style={fabStyles.actionButton} onPress={() => {}}>
+            <View style={[fabStyles.actionIcon, { backgroundColor: colors.primary }]}>
+              <Ionicons name="add-circle-outline" size={24} color={colors.background} />
+            </View>
             <Typography variant="label" color="text" style={fabStyles.actionText}>
               Add Expense
             </Typography>
-          </Button>
+          </Pressable>
           
-          <Button variant="secondary" size="md" fullWidth style={fabStyles.action}>
-            <Ionicons name="people-outline" size={20} color={colors.text} />
+          <Pressable style={fabStyles.actionButton} onPress={() => {}}>
+            <View style={[fabStyles.actionIcon, { backgroundColor: colors.success + '20' }]}>
+              <Ionicons name="people-outline" size={24} color={colors.success} />
+            </View>
             <Typography variant="label" color="text" style={fabStyles.actionText}>
               Create Trip
             </Typography>
-          </Button>
+          </Pressable>
           
-          <Button variant="secondary" size="md" fullWidth style={fabStyles.action}>
-            <Ionicons name="camera-outline" size={20} color={colors.text} />
+          <Pressable style={fabStyles.actionButton} onPress={() => {}}>
+            <View style={[fabStyles.actionIcon, { backgroundColor: colors.info + '20' }]}>
+              <Ionicons name="camera-outline" size={24} color={colors.info} />
+            </View>
             <Typography variant="label" color="text" style={fabStyles.actionText}>
               Scan Receipt
             </Typography>
-          </Button>
+          </Pressable>
           
-          <Button variant="secondary" size="md" fullWidth onPress={onClose}>
+          <Pressable style={fabStyles.cancelButton} onPress={onClose}>
             <Typography variant="label" color="secondary">
               Cancel
             </Typography>
-          </Button>
+          </Pressable>
         </View>
       </Pressable>
     </Modal>
@@ -302,14 +308,41 @@ const fabStyles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
   
-  /** Action button */
-  action: {
+  /** Action button - integrated, beautiful */
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.base,
+    borderRadius: borderRadius.lg,
+    backgroundColor: colors.surface,
     marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   
-  /** Action button text */
+  /** Action icon */
+  actionIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.base,
+  },
+  
+  /** Action text */
   actionText: {
-    marginLeft: spacing.sm,
+    flex: 1,
+  },
+  
+  /** Cancel button */
+  cancelButton: {
+    padding: spacing.base,
+    alignItems: 'center',
+    borderRadius: borderRadius.lg,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
 });
 

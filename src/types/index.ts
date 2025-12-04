@@ -502,6 +502,9 @@ export interface ApiResponse<T> {
  * Defines screens in the authentication flow
  */
 export type AuthStackParamList = {
+  /** Welcome/Onboarding screen (no params) */
+  Welcome: undefined;
+  
   /** Login screen (no params) */
   Login: undefined;
   

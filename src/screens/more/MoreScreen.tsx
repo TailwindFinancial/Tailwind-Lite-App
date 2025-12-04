@@ -7,9 +7,9 @@
  * @module Screens/More
  */
 
-import React from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
-import { Typography } from '@components/design-system';
+import React, { useState } from 'react';
+import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { Typography, CustomAlert } from '@components/design-system';
 import { useAuthStore } from '@store/authStore';
 import { colors, spacing, borderRadius } from '@constants/theme';
 import { Ionicons } from '@expo/vector-icons';
@@ -80,22 +80,14 @@ export const MoreScreen: React.FC = () => {
   // Get user and logout from store
   const { user, logout } = useAuthStore();
   
+  // Alert state
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+  
   /**
    * Handle logout with confirmation
    */
   const handleLogout = () => {
-    Alert.alert(
-      'Sign Out',
-      'Are you sure you want to sign out?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Sign Out',
-          style: 'destructive',
-          onPress: () => logout(),
-        },
-      ]
-    );
+    setShowLogoutAlert(true);
   };
   
   return (
@@ -218,6 +210,18 @@ export const MoreScreen: React.FC = () => {
           </Typography>
         </View>
       </ScrollView>
+      
+      {/* Custom Logout Alert */}
+      <CustomAlert
+        visible={showLogoutAlert}
+        title="Sign Out"
+        message="Are you sure you want to sign out?"
+        buttons={[
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Sign Out', style: 'destructive', onPress: logout },
+        ]}
+        onDismiss={() => setShowLogoutAlert(false)}
+      />
     </View>
   );
 };

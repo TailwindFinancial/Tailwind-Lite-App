@@ -1,360 +1,488 @@
 /**
- * Dashboard Screen - Modern Executive Home Screen
+ * Dashboard Screen - CEO-LEVEL Executive Home
  * 
- * Beautiful, modern dashboard with:
- * - Spending overview with circular progress charts
- * - Active trips summary
- * - Recent expense feed
- * - Quick stats cards
- * - Clean, executive design with gen-z appeal
+ * The most beautiful, modern, sexy dashboard you've ever seen.
+ * Features:
+ * - Animated circular progress rings (Apple Watch style)
+ * - Real-time spending visualization
+ * - Beautiful gradient cards
+ * - Executive stats grid
+ * - Modern, clean, absolutely STUNNING
  * 
  * @module Screens/Dashboard
  */
 
 import React from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, Pressable } from 'react-native';
-import { Typography, Card, CircularProgress } from '@components/design-system';
+import { View, StyleSheet, ScrollView, Pressable, Dimensions } from 'react-native';
+import { Typography, Card, CircularProgress, Button } from '@components/design-system';
 import { useAuthStore } from '@store/authStore';
 import { colors, spacing, borderRadius } from '@constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-// Get screen width for responsive layouts
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const CARD_SPACING = spacing.lg;
+const CARD_WIDTH = (SCREEN_WIDTH - (CARD_SPACING * 3)) / 2;
 
 /**
- * Stat Card Component
- * Beautiful integrated card for displaying statistics
+ * Stat Card - Beautiful integrated stat display
  */
 interface StatCardProps {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
   value: string;
   color: string;
+  trend?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ icon, label, value, color }) => {
+const StatCard: React.FC<StatCardProps> = ({ icon, label, value, color, trend }) => {
   return (
-    <View style={styles.statCard}>
-      <View style={[styles.statIconContainer, { backgroundColor: color + '15' }]}>
-        <Ionicons name={icon} size={24} color={color} />
+    <View style={[styles.statCard, { width: CARD_WIDTH }]}>
+      <View style={[styles.statIconBg, { backgroundColor: color + '15' }]}>
+        <Ionicons name={icon} size={22} color={color} />
       </View>
-      <View style={styles.statContent}>
-        <Typography variant="caption" color="tertiary">
-          {label}
+      <Typography variant="caption" color="tertiary" style={styles.statLabel}>
+        {label}
+      </Typography>
+      <Typography variant="h2" color="text" style={styles.statValue}>
+        {value}
+      </Typography>
+      {trend && (
+        <Typography variant="caption" color={trend.startsWith('+') ? 'success' : 'error'}>
+          {trend}
         </Typography>
-        <Typography variant="h3" color="text" style={styles.statValue}>
-          {value}
-        </Typography>
-      </View>
+      )}
     </View>
   );
 };
 
 /**
- * Dashboard Screen Component
- * 
- * @returns {React.ReactElement} Modern, executive dashboard UI
+ * Recent Activity Item
  */
-export const DashboardScreen: React.FC = () => {
-  // Get user from auth store
-  const { user } = useAuthStore();
-  
-  // Mock data for demonstration
-  const monthlyBudget = 2000;
-  const spent = 650;
-  const progress = spent / monthlyBudget;
-  
+interface ActivityItemProps {
+  icon: keyof typeof Ionicons.glyphMap;
+  title: string;
+  subtitle: string;
+  amount: string;
+  time: string;
+}
+
+const ActivityItem: React.FC<ActivityItemProps> = ({ icon, title, subtitle, amount, time }) => {
   return (
-    <ScrollView 
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Greeting Header */}
-      <View style={styles.greeting}>
-        <Typography variant="body" color="secondary">
-          Good morning,
+    <Pressable style={styles.activityItem}>
+      <View style={styles.activityIcon}>
+        <Ionicons name={icon} size={20} color={colors.primary} />
+      </View>
+      <View style={styles.activityContent}>
+        <Typography variant="label" color="text">
+          {title}
         </Typography>
-        <Typography variant="h1" color="text" style={styles.name}>
-          {user?.name?.split(' ')[0]}
+        <Typography variant="caption" color="secondary">
+          {subtitle}
         </Typography>
       </View>
-      
-      {/* Spending Overview Card with Circular Progress */}
-      <View style={styles.section}>
-        <Card glass={false} elevation="flat" padding="lg" style={styles.spendingCard}>
-          <LinearGradient
-            colors={[colors.primary + '20', colors.primary + '05']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={StyleSheet.absoluteFill}
-          />
-          
-          <View style={styles.spendingContent}>
-            {/* Circular Progress Ring */}
-            <CircularProgress
-              progress={progress}
-              size={140}
-              strokeWidth={14}
-              color={colors.primary}
-              trackColor={colors.surface}
-              showPercentage={false}
-              label={`$${spent}`}
-            />
-            
-            {/* Spending Details */}
-            <View style={styles.spendingDetails}>
-              <Typography variant="label" color="secondary">
-                Monthly Spending
-              </Typography>
-              <Typography variant="h2" color="text" style={styles.spendingAmount}>
-                ${spent.toLocaleString()}
-              </Typography>
-              <Typography variant="caption" color="tertiary">
-                of ${monthlyBudget.toLocaleString()} budget
-              </Typography>
-              
-              {/* Progress Bar */}
-              <View style={styles.progressBar}>
-                <View 
-                  style={[
-                    styles.progressFill, 
-                    { width: `${progress * 100}%` }
-                  ]} 
-                />
-              </View>
-              
-              <Typography variant="caption" color="success">
-                ${(monthlyBudget - spent).toLocaleString()} remaining
-              </Typography>
-            </View>
-          </View>
-        </Card>
+      <View style={styles.activityRight}>
+        <Typography variant="label" color="text">
+          {amount}
+        </Typography>
+        <Typography variant="caption" color="tertiary" align="right">
+          {time}
+        </Typography>
       </View>
-      
-      {/* Quick Stats Grid */}
-      <View style={styles.section}>
-        <View style={styles.statsGrid}>
-          <StatCard
-            icon="calendar-outline"
-            label="This Month"
-            value="$650"
-            color={colors.primary}
-          />
-          <StatCard
-            icon="trending-up-outline"
-            label="vs Last Month"
-            value="+12%"
-            color={colors.success}
-          />
-        </View>
-        <View style={styles.statsGrid}>
-          <StatCard
-            icon="people-outline"
-            label="Active Trips"
-            value="0"
-            color={colors.info}
-          />
-          <StatCard
-            icon="receipt-outline"
-            label="Total Expenses"
-            value="0"
-            color={colors.warning}
-          />
-        </View>
-      </View>
-      
-      {/* Active Trips Section */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Typography variant="h3" color="text">
-            Active Trips
-          </Typography>
-          <Pressable>
-            <Typography variant="label" color="primary">
-              See All
-            </Typography>
-          </Pressable>
-        </View>
-        
-        {/* Empty State */}
-        <Card elevation="flat" padding="lg" style={styles.emptyCard}>
-          <View style={styles.emptyState}>
-            <Ionicons name="airplane-outline" size={48} color={colors.textTertiary} />
-            <Typography variant="body" color="secondary" align="center" style={styles.emptyText}>
-              No active trips
-            </Typography>
-            <Typography variant="caption" color="tertiary" align="center">
-              Create a trip to start tracking expenses
-            </Typography>
-          </View>
-        </Card>
-      </View>
-      
-      {/* Recent Activity Section */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Typography variant="h3" color="text">
-            Recent Activity
-          </Typography>
-        </View>
-        
-        <Card elevation="flat" padding="lg" style={styles.emptyCard}>
-          <View style={styles.emptyState}>
-            <Ionicons name="time-outline" size={48} color={colors.textTertiary} />
-            <Typography variant="body" color="secondary" align="center" style={styles.emptyText}>
-              No recent activity
-            </Typography>
-            <Typography variant="caption" color="tertiary" align="center">
-              Your expense history will appear here
-            </Typography>
-          </View>
-        </Card>
-      </View>
-      
-      {/* Bottom spacing for tab bar */}
-      <View style={styles.bottomSpacer} />
-    </ScrollView>
+    </Pressable>
   );
 };
 
 /**
- * Styles - Modern, Executive, Clean
+ * Dashboard Screen - STUNNING Executive Design
  */
+export const DashboardScreen: React.FC = () => {
+  const { user } = useAuthStore();
+  
+  // Mock data - will be real later
+  const monthlyBudget = 2000;
+  const spent = 1247;
+  const progress = spent / monthlyBudget;
+  const remaining = monthlyBudget - spent;
+  
+  return (
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Top padding under header */}
+        <View style={styles.headerSpacer} />
+        
+        {/* Greeting */}
+        <View style={styles.greeting}>
+          <Typography variant="body" color="secondary">
+            Good morning,
+          </Typography>
+          <Typography variant="display" color="text" style={styles.userName}>
+            {user?.name?.split(' ')[0]}
+          </Typography>
+        </View>
+        
+        {/* Hero - Spending Overview with STUNNING Circular Chart */}
+        <View style={styles.heroSection}>
+          <View style={styles.heroCard}>
+            <LinearGradient
+              colors={[colors.primary + '25', colors.primary + '08', colors.background]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFill}
+            />
+            
+            <View style={styles.heroContent}>
+              {/* Circular Progress - SEXY */}
+              <View style={styles.chartContainer}>
+                <CircularProgress
+                  progress={progress}
+                  size={160}
+                  strokeWidth={16}
+                  color={colors.primary}
+                  trackColor={colors.surface}
+                  showPercentage={false}
+                />
+                <View style={styles.chartCenter}>
+                  <Typography variant="h1" color="primary">
+                    ${spent}
+                  </Typography>
+                  <Typography variant="caption" color="secondary">
+                    of ${monthlyBudget}
+                  </Typography>
+                </View>
+              </View>
+              
+              {/* Spending Details */}
+              <View style={styles.heroDetails}>
+                <Typography variant="label" color="secondary">
+                  MONTHLY SPENDING
+                </Typography>
+                <Typography variant="h2" color="text" style={styles.heroAmount}>
+                  ${spent.toLocaleString()}
+                </Typography>
+                
+                <View style={styles.remainingContainer}>
+                  <View style={styles.remainingDot} />
+                  <Typography variant="body" color="success">
+                    ${remaining.toLocaleString()} remaining
+                  </Typography>
+                </View>
+                
+                {/* Mini Progress Bar */}
+                <View style={styles.miniProgress}>
+                  <View style={[styles.miniProgressFill, { width: `${progress * 100}%` }]} />
+                </View>
+                
+                <Typography variant="caption" color="tertiary">
+                  {Math.round((1 - progress) * 100)}% of budget left
+                </Typography>
+              </View>
+            </View>
+          </View>
+        </View>
+        
+        {/* Stats Grid - BEAUTIFUL */}
+        <View style={styles.statsSection}>
+          <View style={styles.statsRow}>
+            <StatCard
+              icon="calendar-outline"
+              label="This Month"
+              value="$1,247"
+              color={colors.primary}
+              trend="+12.5%"
+            />
+            <StatCard
+              icon="trending-up-outline"
+              label="Avg Per Day"
+              value="$41"
+              color={colors.success}
+            />
+          </View>
+          <View style={styles.statsRow}>
+            <StatCard
+              icon="airplane-outline"
+              label="Active Trips"
+              value="3"
+              color={colors.info}
+            />
+            <StatCard
+              icon="people-outline"
+              label="Friends"
+              value="12"
+              color={colors.warning}
+            />
+          </View>
+        </View>
+        
+        {/* Recent Activity - CLEAN */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Typography variant="h2" color="text">
+              Recent Activity
+            </Typography>
+            <Pressable>
+              <Typography variant="label" color="primary">
+                See All
+              </Typography>
+            </Pressable>
+          </View>
+          
+          <View style={styles.activityList}>
+            <ActivityItem
+              icon="restaurant-outline"
+              title="Dinner at Nobu"
+              subtitle="Split with 4 friends"
+              amount="-$125.00"
+              time="2h ago"
+            />
+            <ActivityItem
+              icon="car-outline"
+              title="Uber to Airport"
+              subtitle="Tokyo Trip"
+              amount="-$45.00"
+              time="Yesterday"
+            />
+            <ActivityItem
+              icon="home-outline"
+              title="Airbnb Payment"
+              subtitle="Bali Adventure"
+              amount="-$850.00"
+              time="2 days ago"
+            />
+          </View>
+        </View>
+        
+        {/* Active Trips Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Typography variant="h2" color="text">
+              Active Trips
+            </Typography>
+            <Pressable>
+              <Typography variant="label" color="primary">
+                View All
+              </Typography>
+            </Pressable>
+          </View>
+          
+          {/* Trip Preview Cards */}
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.tripsScroll}
+          >
+            <View style={styles.tripPreviewCard}>
+              <LinearGradient
+                colors={['#FF6B9D20', '#FF6B9D05']}
+                style={StyleSheet.absoluteFill}
+              />
+              <Ionicons name="airplane" size={32} color="#FF6B9D" style={styles.tripPreviewIcon} />
+              <Typography variant="h3" color="text" style={styles.tripPreviewName}>
+                Tokyo Trip
+              </Typography>
+              <Typography variant="caption" color="secondary">
+                4 members
+              </Typography>
+              <Typography variant="h3" color="text" style={styles.tripPreviewAmount}>
+                $1,250
+              </Typography>
+            </View>
+            
+            <View style={styles.tripPreviewCard}>
+              <LinearGradient
+                colors={['#9B59B620', '#9B59B605']}
+                style={StyleSheet.absoluteFill}
+              />
+              <Ionicons name="home" size={32} color="#9B59B6" style={styles.tripPreviewIcon} />
+              <Typography variant="h3" color="text" style={styles.tripPreviewName}>
+                House Bills
+              </Typography>
+              <Typography variant="caption" color="secondary">
+                3 members
+              </Typography>
+              <Typography variant="h3" color="text" style={styles.tripPreviewAmount}>
+                $450
+              </Typography>
+            </View>
+          </ScrollView>
+        </View>
+        
+        {/* Bottom spacer */}
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
-  /** Main container */
   container: {
     flex: 1,
     backgroundColor: colors.background,
   },
-  
-  /** Greeting section */
+  headerSpacer: {
+    height: spacing.base,
+  },
   greeting: {
-    padding: spacing.lg,
-    paddingTop: spacing.base,
-  },
-  
-  /** User name */
-  name: {
-    marginTop: spacing.xs,
-  },
-  
-  /** Section container */
-  section: {
     paddingHorizontal: spacing.lg,
-    marginBottom: spacing.base,
+    marginBottom: spacing.lg,
   },
-  
-  /** Section header */
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.base,
+  userName: {
+    marginTop: 4,
   },
-  
-  /** Spending card */
-  spendingCard: {
+  heroSection: {
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+  },
+  heroCard: {
+    borderRadius: borderRadius.xl,
+    overflow: 'hidden',
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  
-  /** Spending content */
-  spendingContent: {
-    flexDirection: 'row',
+  heroContent: {
+    padding: spacing.xl,
+  },
+  chartContainer: {
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+    position: 'relative',
+  },
+  chartCenter: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heroDetails: {
     alignItems: 'center',
   },
-  
-  /** Spending details */
-  spendingDetails: {
-    flex: 1,
-    marginLeft: spacing.lg,
-  },
-  
-  /** Spending amount */
-  spendingAmount: {
+  heroAmount: {
     marginTop: spacing.xs,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.base,
   },
-  
-  /** Progress bar container */
-  progressBar: {
-    height: 4,
-    backgroundColor: colors.surface,
-    borderRadius: 2,
-    marginTop: spacing.sm,
+  remainingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: spacing.sm,
+  },
+  remainingDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.success,
+    marginRight: spacing.sm,
+  },
+  miniProgress: {
+    width: '100%',
+    height: 6,
+    backgroundColor: colors.surface,
+    borderRadius: 3,
+    marginVertical: spacing.sm,
     overflow: 'hidden',
   },
-  
-  /** Progress bar fill */
-  progressFill: {
+  miniProgressFill: {
     height: '100%',
     backgroundColor: colors.primary,
-    borderRadius: 2,
+    borderRadius: 3,
   },
-  
-  /** Stats grid */
-  statsGrid: {
+  statsSection: {
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+  },
+  statsRow: {
     flexDirection: 'row',
     gap: spacing.sm,
     marginBottom: spacing.sm,
   },
-  
-  /** Individual stat card */
   statCard: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.base,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  
-  /** Stat icon container */
-  statIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  statIconBg: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: spacing.sm,
+    marginBottom: spacing.sm,
   },
-  
-  /** Stat content */
-  statContent: {
-    flex: 1,
+  statLabel: {
+    marginBottom: 4,
   },
-  
-  /** Stat value */
   statValue: {
     marginTop: 2,
   },
-  
-  /** Empty card */
-  emptyCard: {
+  section: {
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.lg,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.base,
+  },
+  activityList: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.xl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: 'hidden',
+  },
+  activityItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.base,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border + '20',
+  },
+  activityIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.primary + '15',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.base,
+  },
+  activityContent: {
+    flex: 1,
+  },
+  activityRight: {
+    alignItems: 'flex-end',
+  },
+  tripsScroll: {
+    paddingRight: spacing.lg,
+  },
+  tripPreviewCard: {
+    width: 200,
+    height: 200,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
+    marginRight: spacing.base,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
+    overflow: 'hidden',
   },
-  
-  /** Empty state */
-  emptyState: {
-    alignItems: 'center',
-    paddingVertical: spacing.lg,
+  tripPreviewIcon: {
+    marginBottom: spacing.base,
   },
-  
-  /** Empty text */
-  emptyText: {
-    marginTop: spacing.base,
+  tripPreviewName: {
+    marginBottom: spacing.xs,
   },
-  
-  /** Bottom spacer for tab bar */
+  tripPreviewAmount: {
+    marginTop: spacing.sm,
+  },
   bottomSpacer: {
-    height: spacing.xxxl,
+    height: 120,
   },
 });
 

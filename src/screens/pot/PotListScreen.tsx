@@ -1,70 +1,114 @@
 /**
- * Trips Screen - Expense Groups & Pots
+ * Trips Screen - STUNNING Expense Groups
  * 
- * Modern, executive display of all trips (expense groups).
- * Beautiful card-based layout with stats and quick actions.
+ * Beautiful, modern trip management with integrated styling.
+ * No sticker look - everything stitched into the interface.
  * 
  * @module Screens/Pot/PotList
  */
 
 import React from 'react';
-import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
-import { Typography, Card, Button } from '@components/design-system';
+import { View, StyleSheet, ScrollView, Pressable, Dimensions } from 'react-native';
+import { Typography, CircularProgress } from '@components/design-system';
 import { colors, spacing, borderRadius } from '@constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
 /**
- * Trip Card Component
- * Beautiful card for displaying trip info
+ * Trip Card - Integrated, Beautiful
  */
 interface TripCardProps {
   name: string;
+  location: string;
   totalSpent: number;
-  currency: string;
-  membersCount: number;
+  budget: number;
+  members: number;
   color: string;
 }
 
-const TripCard: React.FC<TripCardProps> = ({ name, totalSpent, currency, membersCount, color }) => {
+const TripCard: React.FC<TripCardProps> = ({
+  name,
+  location,
+  totalSpent,
+  budget,
+  members,
+  color,
+}) => {
+  const progress = totalSpent / budget;
+  
   return (
     <Pressable style={styles.tripCard}>
       <LinearGradient
-        colors={[color + '20', color + '05']}
+        colors={[color + '12', color + '03']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}
       />
       
-      <View style={styles.tripContent}>
-        <View style={styles.tripHeader}>
-          <View>
-            <Typography variant="h3" color="text">
-              {name}
+      <View style={styles.tripHeader}>
+        <View style={styles.tripTitleSection}>
+          <Typography variant="h2" color="text">
+            {name}
+          </Typography>
+          <View style={styles.tripLocation}>
+            <Ionicons name="location-outline" size={14} color={colors.textSecondary} />
+            <Typography variant="caption" color="secondary" style={styles.locationText}>
+              {location}
             </Typography>
-            <View style={styles.tripMeta}>
-              <Ionicons name="people" size={14} color={colors.textSecondary} />
-              <Typography variant="caption" color="secondary" style={styles.tripMetaText}>
-                {membersCount} members
-              </Typography>
-            </View>
           </View>
-          <View style={[styles.tripIcon, { backgroundColor: color + '20' }]}>
-            <Ionicons name="airplane" size={24} color={color} />
+        </View>
+        <View style={[styles.tripIconContainer, { backgroundColor: color + '20' }]}>
+          <Ionicons name="airplane" size={24} color={color} />
+        </View>
+      </View>
+      
+      <View style={styles.tripBody}>
+        <View style={styles.tripProgress}>
+          <CircularProgress
+            progress={progress}
+            size={80}
+            strokeWidth={8}
+            color={color}
+            trackColor={colors.surface}
+            showPercentage={false}
+          />
+          <View style={styles.progressCenter}>
+            <Typography variant="label" color="text">
+              {Math.round(progress * 100)}%
+            </Typography>
           </View>
         </View>
         
-        <View style={styles.tripFooter}>
-          <View>
+        <View style={styles.tripStats}>
+          <View style={styles.tripStat}>
             <Typography variant="caption" color="tertiary">
-              Total Spent
+              SPENT
             </Typography>
-            <Typography variant="h2" color="text" style={styles.tripAmount}>
-              {currency}{totalSpent.toLocaleString()}
+            <Typography variant="h3" color="text" style={styles.statValue}>
+              ${totalSpent.toLocaleString()}
             </Typography>
           </View>
-          <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+          <View style={styles.tripStat}>
+            <Typography variant="caption" color="tertiary">
+              BUDGET
+            </Typography>
+            <Typography variant="label" color="secondary" style={styles.statValue}>
+              ${budget.toLocaleString()}
+            </Typography>
+          </View>
         </View>
+      </View>
+      
+      <View style={styles.tripFooter}>
+        <View style={styles.members}>
+          <Ionicons name="people" size={16} color={colors.textSecondary} />
+          <Typography variant="caption" color="secondary" style={styles.membersText}>
+            {members} members
+          </Typography>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
       </View>
     </Pressable>
   );
@@ -74,59 +118,58 @@ const TripCard: React.FC<TripCardProps> = ({ name, totalSpent, currency, members
  * Trips Screen Component
  */
 export const PotListScreen: React.FC = () => {
-  // Mock data for demonstration
+  // Mock trips data
   const mockTrips = [
-    // Empty for now - will show empty state
+    {
+      name: 'Tokyo Trip',
+      location: 'Tokyo, Japan',
+      totalSpent: 3250,
+      budget: 5000,
+      members: 4,
+      color: colors.primary,
+    },
+    {
+      name: 'Bali Adventure',
+      location: 'Bali, Indonesia',
+      totalSpent: 1850,
+      budget: 3000,
+      members: 6,
+      color: '#9B59B6',
+    },
   ];
   
   return (
     <View style={styles.container}>
+      {/* Top padding */}
+      <View style={styles.headerSpacer} />
+      
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header with action */}
+        {/* Header */}
         <View style={styles.header}>
           <View>
             <Typography variant="h1" color="text">
               Trips
             </Typography>
-            <Typography variant="body" color="secondary" style={styles.headerSubtitle}>
-              {mockTrips.length} active {mockTrips.length === 1 ? 'trip' : 'trips'}
+            <Typography variant="body" color="secondary" style={styles.subtitle}>
+              {mockTrips.length} active trips
             </Typography>
           </View>
           <Pressable style={styles.addButton}>
-            <Ionicons name="add-circle" size={32} color={colors.primary} />
+            <View style={styles.addButtonInner}>
+              <Ionicons name="add" size={24} color={colors.primary} />
+            </View>
           </Pressable>
         </View>
         
-        {/* Content */}
-        {mockTrips.length === 0 ? (
-          // Empty State
-          <View style={styles.emptyContainer}>
-            <Card glass={false} elevation="flat" padding="xl" style={styles.emptyCard}>
-              <View style={styles.emptyContent}>
-                <View style={styles.emptyIconContainer}>
-                  <Ionicons name="airplane-outline" size={64} color={colors.primary} />
-                </View>
-                <Typography variant="h2" color="text" align="center" style={styles.emptyTitle}>
-                  No Trips Yet
-                </Typography>
-                <Typography variant="body" color="secondary" align="center" style={styles.emptyText}>
-                  Create your first trip to start tracking shared expenses with friends
-                </Typography>
-                <Button variant="primary" size="lg" fullWidth style={styles.emptyButton}>
-                  <Ionicons name="add" size={20} color={colors.background} style={styles.buttonIcon} />
-                  Create Your First Trip
-                </Button>
-              </View>
-            </Card>
-          </View>
-        ) : (
-          // Trip List
-          <View style={styles.tripList}>
-            {mockTrips.map((trip, index) => (
-              <TripCard key={index} {...trip} />
-            ))}
-          </View>
-        )}
+        {/* Trips List */}
+        <View style={styles.tripsList}>
+          {mockTrips.map((trip, index) => (
+            <TripCard key={index} {...trip} />
+          ))}
+        </View>
+        
+        {/* Bottom spacer */}
+        <View style={styles.bottomSpacer} />
       </ScrollView>
     </View>
   );
@@ -137,101 +180,115 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  headerSpacer: {
+    height: spacing.base,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    padding: spacing.lg,
-    paddingTop: spacing.base,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.lg,
   },
-  headerSubtitle: {
+  subtitle: {
     marginTop: spacing.xs,
   },
   addButton: {
     padding: spacing.xs,
   },
-  emptyContainer: {
-    flex: 1,
-    padding: spacing.lg,
-    justifyContent: 'center',
-  },
-  emptyCard: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  emptyContent: {
-    alignItems: 'center',
-  },
-  emptyIconContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+  addButtonInner: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: colors.primary + '15',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.lg,
+    borderWidth: 1.5,
+    borderColor: colors.primary + '30',
   },
-  emptyTitle: {
-    marginBottom: spacing.base,
-  },
-  emptyText: {
-    marginBottom: spacing.xl,
-  },
-  emptyButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  buttonIcon: {
-    marginRight: spacing.sm,
-  },
-  tripList: {
-    padding: spacing.lg,
+  tripsList: {
+    paddingHorizontal: spacing.lg,
   },
   tripCard: {
-    borderRadius: borderRadius.lg,
+    borderRadius: borderRadius.xl,
     marginBottom: spacing.base,
     borderWidth: 1,
     borderColor: colors.border,
-    overflow: 'hidden',
     backgroundColor: colors.surface,
-  },
-  tripContent: {
+    overflow: 'hidden',
     padding: spacing.lg,
   },
   tripHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: spacing.base,
+    marginBottom: spacing.lg,
   },
-  tripMeta: {
+  tripTitleSection: {
+    flex: 1,
+  },
+  tripLocation: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: spacing.xs,
   },
-  tripMetaText: {
-    marginLeft: spacing.xs,
+  locationText: {
+    marginLeft: 4,
   },
-  tripIcon: {
+  tripIconContainer: {
     width: 48,
     height: 48,
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  tripBody: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.base,
+    paddingVertical: spacing.base,
+    borderTopWidth: 1,
+    borderTopColor: colors.border + '20',
+  },
+  tripProgress: {
+    position: 'relative',
+    marginRight: spacing.lg,
+  },
+  progressCenter: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tripStats: {
+    flex: 1,
+  },
+  tripStat: {
+    marginBottom: spacing.sm,
+  },
+  statValue: {
+    marginTop: 2,
+  },
   tripFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     paddingTop: spacing.base,
     borderTopWidth: 1,
-    borderTopColor: colors.border + '30',
+    borderTopColor: colors.border + '20',
   },
-  tripAmount: {
-    marginTop: spacing.xs,
+  members: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  membersText: {
+    marginLeft: spacing.xs,
+  },
+  bottomSpacer: {
+    height: 120,
   },
 });
 

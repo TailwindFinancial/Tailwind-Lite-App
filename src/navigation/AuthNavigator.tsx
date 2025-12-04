@@ -14,6 +14,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@types';
+import { WelcomeScreen } from '@screens/welcome/WelcomeScreen';
 import { LoginScreen } from '@screens/auth/LoginScreen';
 import { RegisterScreen } from '@screens/auth/RegisterScreen';
 import { ForgotPasswordScreen } from '@screens/auth/ForgotPasswordScreen';
@@ -59,12 +60,21 @@ export const AuthNavigator: React.FC = () => {
         animation: 'slide_from_right',
       }}
     >
-      {/* Login Screen - Initial route in auth flow */}
+      {/* Welcome Screen - Initial route showing app overview */}
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{
+          headerShown: false, // Full-screen onboarding experience
+        }}
+      />
+      
+      {/* Login Screen */}
       <Stack.Screen
         name="Login"
         component={LoginScreen}
         options={{
-          headerShown: false, // Hide header on login screen for full-screen experience
+          headerShown: false,
         }}
       />
       
