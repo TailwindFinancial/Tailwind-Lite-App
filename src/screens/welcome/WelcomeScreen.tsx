@@ -1,62 +1,59 @@
 /**
- * Welcome Screen - Executive Launch Experience
+ * Welcome Screen - Ultra-Executive Launch Experience
  * 
- * Beautiful onboarding screen shown on first app launch.
- * Inspired by modern banking apps (RBC style).
- * 
- * Features:
- * - Hero section with app name
- * - Sign In CTA
- * - Feature previews
- * - Account creation link
- * - Clean, executive, CEO-level design
+ * Refined, integrated design. Every element feels part of the page.
+ * No sticker buttons - everything flows naturally.
+ * CEO-level sophistication.
  * 
  * @module Screens/Welcome
  */
 
 import React from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Dimensions, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, Dimensions } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Typography, Button } from '@components/design-system';
+import { Typography } from '@components/design-system';
 import { AuthStackParamList } from '@types';
 import { colors, spacing, borderRadius } from '@constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
 type WelcomeScreenProps = NativeStackScreenProps<AuthStackParamList, 'Welcome'>;
 
 /**
- * Feature Preview Item
+ * Feature Card - Ultra-refined
  */
-interface FeatureProps {
+interface FeatureCardProps {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
   description: string;
+  color: string;
 }
 
-const FeatureItem: React.FC<FeatureProps> = ({ icon, title, description }) => {
+const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description, color }) => {
   return (
-    <View style={styles.featureItem}>
-      <View style={styles.featureIcon}>
-        <Ionicons name={icon} size={28} color={colors.primary} />
+    <Pressable style={styles.featureCard}>
+      <LinearGradient
+        colors={[color + '08', 'transparent']}
+        style={StyleSheet.absoluteFill}
+      />
+      <View style={[styles.featureIconContainer, { backgroundColor: color + '12' }]}>
+        <Ionicons name={icon} size={24} color={color} />
       </View>
-      <View style={styles.featureContent}>
-        <Typography variant="label" color="text">
-          {title}
-        </Typography>
-        <Typography variant="bodySmall" color="secondary" style={styles.featureDesc}>
-          {description}
-        </Typography>
-      </View>
-      <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
-    </View>
+      <Typography variant="label" color="text" style={styles.featureTitle}>
+        {title}
+      </Typography>
+      <Typography variant="caption" color="secondary" style={styles.featureDesc}>
+        {description}
+      </Typography>
+    </Pressable>
   );
 };
 
 /**
- * Welcome Screen Component
+ * Welcome Screen - Ultra-Executive
  */
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   return (
@@ -65,82 +62,103 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Hero Section with Gradient */}
-        <LinearGradient
-          colors={[colors.primary + '20', colors.background]}
-          style={styles.hero}
-        >
-          {/* Logo */}
-          <Image
-            source={require('../../../assets/transparant-bg-logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          
-          {/* App Name */}
-          <Typography variant="display" color="text" align="center" style={styles.appName}>
-            Tailwind
-          </Typography>
-          <Typography variant="body" color="secondary" align="center" style={styles.tagline}>
-            Split expenses effortlessly
-          </Typography>
-        </LinearGradient>
-        
-        {/* Primary Sign In Button - STUNNING */}
-        <View style={styles.ctaSection}>
-          <Pressable
-            style={styles.signInButton}
-            onPress={() => navigation.navigate('Login')}
+        {/* Sophisticated Hero */}
+        <View style={styles.hero}>
+          <LinearGradient
+            colors={[colors.primary + '15', 'transparent']}
+            style={styles.heroGradient}
           >
-            <Typography variant="label" color="text" style={styles.signInText}>
-              Sign In
+            <View style={styles.logoContainer}>
+              <View style={styles.logoCircle}>
+                <Ionicons name="flash" size={40} color={colors.primary} />
+              </View>
+            </View>
+            
+            <Typography variant="display" color="text" align="center" style={styles.appName}>
+              Tailwind
             </Typography>
-            <Ionicons name="arrow-forward" size={20} color={colors.background} style={styles.signInArrow} />
-          </Pressable>
+            <Typography variant="body" color="secondary" align="center" style={styles.tagline}>
+              Split expenses. Stay balanced.
+            </Typography>
+          </LinearGradient>
         </View>
         
-        {/* Features Preview */}
-        <View style={styles.previewSection}>
-          <Typography variant="h3" color="text" style={styles.previewTitle}>
-            Features
-          </Typography>
-          
-          <View style={styles.featuresList}>
-            <FeatureItem
-              icon="people-outline"
-              title="Split with Friends"
-              description="Track shared expenses on trips and events"
+        {/* Features Grid - Elegant */}
+        <View style={styles.featuresSection}>
+          <View style={styles.featuresRow}>
+            <FeatureCard
+              icon="people-circle-outline"
+              title="Group Expenses"
+              description="Track shared costs"
+              color={colors.primary}
             />
-            <FeatureItem
+            <FeatureCard
               icon="camera-outline"
-              title="Scan Receipts"
-              description="Auto-add expenses with OCR scanning"
+              title="Smart Scanning"
+              description="OCR receipts instantly"
+              color="#9B59B6"
             />
-            <FeatureItem
-              icon="stats-chart-outline"
-              title="Trip Wrapped"
-              description="Beautiful expense summaries"
+          </View>
+          <View style={styles.featuresRow}>
+            <FeatureCard
+              icon="analytics-outline"
+              title="Insights"
+              description="Trip summaries"
+              color="#3498DB"
             />
-            <FeatureItem
-              icon="swap-horizontal-outline"
-              title="Easy Settlements"
-              description="Settle up with integrated payment links"
+            <FeatureCard
+              icon="wallet-outline"
+              title="Easy Settle"
+              description="One-tap payments"
+              color="#E74C3C"
             />
           </View>
         </View>
         
-        {/* Footer Links */}
-        <View style={styles.footer}>
-          <Pressable onPress={() => navigation.navigate('Register')}>
-            <Typography variant="label" color="primary" align="center">
-              Create Account
-            </Typography>
+        {/* Refined Sign In - Integrated, NOT a sticker */}
+        <View style={styles.authSection}>
+          <Pressable
+            style={styles.signInContainer}
+            onPress={() => navigation.navigate('Login')}
+          >
+            <View style={styles.signInContent}>
+              <View>
+                <Typography variant="label" color="text">
+                  Already have an account?
+                </Typography>
+                <Typography variant="body" color="primary" style={styles.signInLabel}>
+                  Sign in to continue
+                </Typography>
+              </View>
+              <Ionicons name="arrow-forward-circle" size={32} color={colors.primary} />
+            </View>
           </Pressable>
           
+          {/* Create Account */}
+          <Pressable
+            style={styles.createAccountContainer}
+            onPress={() => navigation.navigate('Register')}
+          >
+            <View style={styles.createAccountContent}>
+              <View>
+                <Typography variant="label" color="secondary">
+                  New to Tailwind?
+                </Typography>
+                <Typography variant="body" color="text" style={styles.createLabel}>
+                  Create a free account
+                </Typography>
+              </View>
+              <Ionicons name="person-add-outline" size={28} color={colors.text} />
+            </View>
+          </Pressable>
+        </View>
+        
+        {/* Footer */}
+        <View style={styles.footer}>
           <View style={styles.footerLinks}>
             <Pressable>
               <Typography variant="caption" color="tertiary">
-                Privacy Policy
+                About
               </Typography>
             </Pressable>
             <Typography variant="caption" color="tertiary">
@@ -148,10 +166,21 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
             </Typography>
             <Pressable>
               <Typography variant="caption" color="tertiary">
-                Terms of Service
+                Privacy
+              </Typography>
+            </Pressable>
+            <Typography variant="caption" color="tertiary">
+              •
+            </Typography>
+            <Pressable>
+              <Typography variant="caption" color="tertiary">
+                Terms
               </Typography>
             </Pressable>
           </View>
+          <Typography variant="caption" color="tertiary" align="center" style={styles.version}>
+            Tailwind v1.0.0
+          </Typography>
         </View>
       </ScrollView>
     </View>
@@ -167,88 +196,115 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   hero: {
-    alignItems: 'center',
-    paddingTop: SCREEN_HEIGHT * 0.12,
-    paddingBottom: spacing.xxl,
+    paddingTop: SCREEN_HEIGHT * 0.08,
+    paddingBottom: spacing.xxxl,
   },
-  logo: {
-    width: 120,
-    height: 120,
+  heroGradient: {
+    alignItems: 'center',
+    paddingTop: spacing.xl,
+  },
+  logoContainer: {
     marginBottom: spacing.lg,
   },
+  logoCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: colors.primary + '30',
+  },
   appName: {
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
   tagline: {
     marginTop: spacing.xs,
   },
-  ctaSection: {
-    paddingHorizontal: spacing.xl,
-    marginBottom: spacing.xl,
-  },
-  signInButton: {
-    backgroundColor: colors.primary,
-    height: 58,
-    borderRadius: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: spacing.xl,
-  },
-  signInText: {
-    fontSize: 18,
-    letterSpacing: 0.5,
-  },
-  signInArrow: {
-    marginLeft: spacing.sm,
-  },
-  previewSection: {
+  featuresSection: {
     paddingHorizontal: spacing.lg,
     marginBottom: spacing.xl,
   },
-  previewTitle: {
-    marginBottom: spacing.base,
-    paddingHorizontal: spacing.sm,
+  featuresRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.sm,
   },
-  featuresList: {
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.xl,
+  featureCard: {
+    flex: 1,
+    padding: spacing.base,
+    borderRadius: borderRadius.lg,
     borderWidth: 1,
     borderColor: colors.border,
+    backgroundColor: colors.surface,
+    minHeight: 130,
     overflow: 'hidden',
   },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: spacing.base,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border + '30',
-  },
-  featureIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.primary + '15',
+  featureIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: spacing.base,
+    marginBottom: spacing.sm,
   },
-  featureContent: {
-    flex: 1,
+  featureTitle: {
+    marginBottom: 4,
   },
   featureDesc: {
+    lineHeight: 16,
+  },
+  authSection: {
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.xl,
+  },
+  signInContainer: {
+    borderRadius: borderRadius.lg,
+    borderWidth: 1,
+    borderColor: colors.primary + '40',
+    backgroundColor: colors.primary + '08',
+    marginBottom: spacing.base,
+    overflow: 'hidden',
+  },
+  signInContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: spacing.lg,
+  },
+  signInLabel: {
+    marginTop: 2,
+  },
+  createAccountContainer: {
+    borderRadius: borderRadius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    overflow: 'hidden',
+  },
+  createAccountContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: spacing.lg,
+  },
+  createLabel: {
     marginTop: 2,
   },
   footer: {
     alignItems: 'center',
     paddingBottom: spacing.xxxl,
+    paddingHorizontal: spacing.lg,
   },
   footerLinks: {
     flexDirection: 'row',
     gap: spacing.sm,
-    marginTop: spacing.base,
+    marginBottom: spacing.sm,
+  },
+  version: {
+    opacity: 0.5,
   },
 });
 
 export default WelcomeScreen;
-
