@@ -106,24 +106,25 @@ interface MemberBalanceProps {
 
 const MemberBalance: React.FC<MemberBalanceProps> = ({ name, balance, status }) => {
   const balanceColor = status === 'owes' ? colors.error : status === 'owed' ? colors.success : colors.textSecondary;
+  const balanceText = status === 'owes' ? 'owes' : status === 'owed' ? 'gets back' : 'settled';
   
   return (
     <View style={styles.memberBalance}>
       <View style={styles.memberLeft}>
-        <View style={[styles.memberAvatar, { borderColor: balanceColor + '30' }]}>
+        <View style={[styles.memberAvatar, { borderColor: balanceColor + '40' }]}>
           <Ionicons name="person" size={20} color={balanceColor} />
         </View>
-        <Typography variant="body" color="text">
-          {name}
-        </Typography>
+        <View>
+          <Typography variant="label" color="text">
+            {name}
+          </Typography>
+          <Typography variant="caption" style={{ color: balanceColor }}>
+            {balanceText}
+          </Typography>
+        </View>
       </View>
       <View style={styles.memberRight}>
-        {status !== 'settled' && (
-          <Typography variant="caption" color={balanceColor} style={styles.memberStatus}>
-            {status === 'owes' ? 'owes' : 'gets back'}
-          </Typography>
-        )}
-        <Typography variant="label" color={balanceColor}>
+        <Typography variant="h3" style={{ color: balanceColor }}>
           ${Math.abs(balance).toFixed(2)}
         </Typography>
       </View>
@@ -179,6 +180,7 @@ export const PotDetailScreen: React.FC<PotDetailScreenProps> = ({ route, navigat
     { name: 'Sarah', balance: -67.50, status: 'owes' },
     { name: 'Mike', balance: 234.25, status: 'owed' },
     { name: 'Emma', balance: -45.00, status: 'owes' },
+    { name: 'You', balance: 0, status: 'settled' },
   ];
   
   const progress = trip.totalSpent / trip.budget;
@@ -385,7 +387,7 @@ export const PotDetailScreen: React.FC<PotDetailScreenProps> = ({ route, navigat
                   <View style={styles.categoryBar}>
                     <View style={[styles.categoryFill, { width: '60%', backgroundColor: colors.primary }]} />
                   </View>
-                  <Typography variant="label" color="text">
+                  <Typography variant="label" color="text" style={styles.categoryAmount}>
                     $1,247
                   </Typography>
                 </View>
@@ -402,7 +404,7 @@ export const PotDetailScreen: React.FC<PotDetailScreenProps> = ({ route, navigat
                   <View style={styles.categoryBar}>
                     <View style={[styles.categoryFill, { width: '25%', backgroundColor: '#9B59B6' }]} />
                   </View>
-                  <Typography variant="label" color="text">
+                  <Typography variant="label" color="text" style={styles.categoryAmount}>
                     $520
                   </Typography>
                 </View>
@@ -419,8 +421,26 @@ export const PotDetailScreen: React.FC<PotDetailScreenProps> = ({ route, navigat
                   <View style={styles.categoryBar}>
                     <View style={[styles.categoryFill, { width: '40%', backgroundColor: '#3498DB' }]} />
                   </View>
-                  <Typography variant="label" color="text">
+                  <Typography variant="label" color="text" style={styles.categoryAmount}>
                     $830
+                  </Typography>
+                </View>
+              </View>
+              
+              {/* Top Spender */}
+              <View style={styles.topSpenderCard}>
+                <View style={styles.topSpenderIcon}>
+                  <Ionicons name="trophy" size={24} color={colors.warning} />
+                </View>
+                <View style={styles.topSpenderContent}>
+                  <Typography variant="caption" color="tertiary">
+                    TOP SPENDER
+                  </Typography>
+                  <Typography variant="h3" color="text" style={styles.topSpenderName}>
+                    Sarah
+                  </Typography>
+                  <Typography variant="body" color="warning">
+                    $1,450 • 45% of total
                   </Typography>
                 </View>
               </View>
@@ -438,6 +458,62 @@ export const PotDetailScreen: React.FC<PotDetailScreenProps> = ({ route, navigat
                 per day over 20 days
               </Typography>
             </View>
+            
+            {/* Spending Trend Chart */}
+            <View style={styles.analyticsCard}>
+              <Typography variant="h3" color="text" style={styles.analyticsTitle}>
+                Weekly Trend
+              </Typography>
+              <View style={styles.trendChart}>
+                {[40, 65, 45, 80, 55, 70, 62].map((height, index) => (
+                  <View key={index} style={styles.barContainer}>
+                    <View 
+                      style={[
+                        styles.bar, 
+                        { 
+                          height: `${height}%`,
+                          backgroundColor: index === 6 ? colors.primary : colors.primary + '40'
+                        }
+                      ]} 
+                    />
+                    <Typography variant="caption" color="tertiary" style={styles.barLabel}>
+                      {['M', 'T', 'W', 'T', 'F', 'S', 'S'][index]}
+                    </Typography>
+                  </View>
+                ))}
+              </View>
+            </View>
+            
+            {/* Payment Status */}
+            <View style={styles.analyticsCard}>
+              <Typography variant="h3" color="text" style={styles.analyticsTitle}>
+                Settlement Status
+              </Typography>
+              <View style={styles.settlementRow}>
+                <View style={styles.settlementStat}>
+                  <View style={[styles.settlementIcon, { backgroundColor: colors.success + '15' }]}>
+                    <Ionicons name="checkmark-circle" size={32} color={colors.success} />
+                  </View>
+                  <Typography variant="caption" color="tertiary" align="center">
+                    SETTLED
+                  </Typography>
+                  <Typography variant="h2" color="success" align="center" style={styles.settlementValue}>
+                    85%
+                  </Typography>
+                </View>
+                <View style={styles.settlementStat}>
+                  <View style={[styles.settlementIcon, { backgroundColor: colors.warning + '15' }]}>
+                    <Ionicons name="time" size={32} color={colors.warning} />
+                  </View>
+                  <Typography variant="caption" color="tertiary" align="center">
+                    PENDING
+                  </Typography>
+                  <Typography variant="h2" color="warning" align="center" style={styles.settlementValue}>
+                    15%
+                  </Typography>
+                </View>
+              </View>
+            </View>
           </View>
         )}
         
@@ -445,12 +521,6 @@ export const PotDetailScreen: React.FC<PotDetailScreenProps> = ({ route, navigat
         <View style={styles.bottomSpacer} />
       </ScrollView>
       
-      {/* Floating Add Button */}
-      <View style={styles.floatingButton}>
-        <Pressable style={styles.addExpenseButton}>
-          <Ionicons name="add" size={28} color={colors.background} />
-        </Pressable>
-      </View>
     </View>
   );
 };
@@ -659,58 +729,139 @@ const styles = StyleSheet.create({
     marginBottom: spacing.base,
   },
   categoryItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.base,
+    marginBottom: spacing.lg,
   },
   categoryLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 140,
+    marginBottom: spacing.xs,
   },
   categoryDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     marginRight: spacing.sm,
   },
   categoryRight: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: spacing.base,
   },
   categoryBar: {
     flex: 1,
-    height: 8,
-    backgroundColor: colors.surface,
-    borderRadius: 4,
+    height: 10,
+    backgroundColor: colors.background,
+    borderRadius: 5,
     overflow: 'hidden',
   },
   categoryFill: {
     height: '100%',
-    borderRadius: 4,
+    borderRadius: 5,
+  },
+  categoryAmount: {
+    minWidth: 80,
+    textAlign: 'right',
+  },
+  topSpenderCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: spacing.base,
+    padding: spacing.base,
+    borderRadius: borderRadius.md,
+    backgroundColor: colors.warning + '10',
+    borderWidth: 1,
+    borderColor: colors.warning + '30',
+  },
+  topSpenderIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.warning + '20',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.base,
+  },
+  topSpenderContent: {
+    flex: 1,
+  },
+  topSpenderName: {
+    marginTop: 2,
+    marginBottom: 2,
   },
   dailyAvg: {
     marginVertical: spacing.sm,
   },
-  floatingButton: {
-    position: 'absolute',
-    bottom: 100,
-    right: spacing.lg,
+  trendChart: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    height: 120,
+    marginTop: spacing.base,
+    paddingHorizontal: spacing.sm,
   },
-  addExpenseButton: {
+  barContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginHorizontal: 2,
+  },
+  bar: {
+    width: '100%',
+    borderTopLeftRadius: 6,
+    borderTopRightRadius: 6,
+    minHeight: 20,
+  },
+  barLabel: {
+    marginTop: spacing.xs,
+  },
+  settlementRow: {
+    flexDirection: 'row',
+    gap: spacing.base,
+    marginTop: spacing.base,
+  },
+  settlementStat: {
+    flex: 1,
+    alignItems: 'center',
+    padding: spacing.base,
+    borderRadius: borderRadius.lg,
+    backgroundColor: colors.background,
+  },
+  settlementIcon: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 8,
+    marginBottom: spacing.sm,
+  },
+  settlementValue: {
+    marginTop: spacing.xs,
+  },
+  topSpenderCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: spacing.lg,
+    padding: spacing.base,
+    borderRadius: borderRadius.lg,
+    backgroundColor: colors.warning + '08',
+    borderWidth: 1,
+    borderColor: colors.warning + '30',
+  },
+  topSpenderIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.warning + '20',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.base,
+  },
+  topSpenderContent: {
+    flex: 1,
+  },
+  topSpenderName: {
+    marginTop: 2,
+    marginBottom: 2,
   },
   bottomSpacer: {
     height: 140,

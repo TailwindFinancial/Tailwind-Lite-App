@@ -322,14 +322,16 @@ export const DashboardScreen: React.FC = () => {
                 colors={['#FF6B9D20', '#FF6B9D05']}
                 style={StyleSheet.absoluteFill}
               />
-              <Ionicons name="airplane" size={32} color="#FF6B9D" style={styles.tripPreviewIcon} />
-              <Typography variant="h3" color="text" style={styles.tripPreviewName}>
-                Tokyo Trip
-              </Typography>
-              <Typography variant="caption" color="secondary">
-                4 members
-              </Typography>
-              <Typography variant="h3" color="text" style={styles.tripPreviewAmount}>
+              <View>
+                <Ionicons name="airplane" size={28} color="#FF6B9D" style={styles.tripPreviewIcon} />
+                <Typography variant="h3" color="text" numberOfLines={1}>
+                  Tokyo Trip
+                </Typography>
+                <Typography variant="caption" color="secondary">
+                  4 members
+                </Typography>
+              </View>
+              <Typography variant="h2" color="text" style={styles.tripPreviewAmount}>
                 $1,250
               </Typography>
             </View>
@@ -339,14 +341,16 @@ export const DashboardScreen: React.FC = () => {
                 colors={['#9B59B620', '#9B59B605']}
                 style={StyleSheet.absoluteFill}
               />
-              <Ionicons name="home" size={32} color="#9B59B6" style={styles.tripPreviewIcon} />
-              <Typography variant="h3" color="text" style={styles.tripPreviewName}>
-                House Bills
-              </Typography>
-              <Typography variant="caption" color="secondary">
-                3 members
-              </Typography>
-              <Typography variant="h3" color="text" style={styles.tripPreviewAmount}>
+              <View>
+                <Ionicons name="home" size={28} color="#9B59B6" style={styles.tripPreviewIcon} />
+                <Typography variant="h3" color="text" numberOfLines={1}>
+                  House Bills
+                </Typography>
+                <Typography variant="caption" color="secondary">
+                  3 members
+                </Typography>
+              </View>
+              <Typography variant="h2" color="text" style={styles.tripPreviewAmount}>
                 $450
               </Typography>
             </View>
@@ -519,24 +523,27 @@ const styles = StyleSheet.create({
     paddingRight: spacing.lg,
   },
   tripPreviewCard: {
-    width: 200,
-    height: 200,
+    width: 180,
+    height: 180,
     borderRadius: borderRadius.xl,
-    padding: spacing.lg,
+    padding: spacing.base,
     marginRight: spacing.base,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
     overflow: 'hidden',
+    justifyContent: 'space-between',
   },
   tripPreviewIcon: {
-    marginBottom: spacing.base,
+    marginBottom: spacing.xs,
   },
   tripPreviewName: {
     marginBottom: spacing.xs,
+    numberOfLines: 1,
+    ellipsizeMode: 'tail',
   },
   tripPreviewAmount: {
-    marginTop: spacing.sm,
+    marginTop: 'auto',
   },
   bottomSpacer: {
     height: 120,
