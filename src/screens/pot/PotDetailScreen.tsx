@@ -24,7 +24,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Typography, CircularProgress, Card, Button } from '@components/design-system';
+import { Typography, CircularProgress, MultiRingProgress, Card, Button } from '@components/design-system';
 import { PotStackParamList } from '@types';
 import { colors, spacing, borderRadius } from '@constants/theme';
 import { Ionicons } from '@expo/vector-icons';
@@ -370,67 +370,49 @@ export const PotDetailScreen: React.FC<PotDetailScreenProps> = ({ route, navigat
         
         {activeTab === 'analytics' && (
           <View style={styles.section}>
-            {/* Category Breakdown */}
-            {/* Category Breakdown - EXECUTIVE */}
-            <View style={styles.categoryCard}>
-              <Typography variant="h2" color="text" style={styles.categoryTitle}>
-                Spending by Category
+            {/* Multi-Ring Chart - APPLE WATCH STYLE */}
+            <View style={styles.ringsCard}>
+              <Typography variant="h2" color="text" align="center" style={styles.ringsTitle}>
+                Spending Breakdown
               </Typography>
               
-              {[
-                { name: 'Food & Dining', amount: 1247, percent: 38, color: colors.primary },
-                { name: 'Accommodation', amount: 830, percent: 26, color: '#3498DB' },
-                { name: 'Transport', amount: 520, percent: 16, color: '#9B59B6' },
-                { name: 'Activities', amount: 420, percent: 13, color: '#E74C3C' },
-                { name: 'Other', amount: 230, percent: 7, color: colors.textTertiary },
-              ].map((category, index) => (
-                <View key={index} style={styles.categoryRow}>
-                  <View style={styles.categoryInfo}>
-                    <View style={[styles.categoryIndicator, { backgroundColor: category.color }]} />
-                    <Typography variant="body" color="text" style={styles.categoryName}>
-                      {category.name}
-                    </Typography>
-                  </View>
-                  <View style={styles.categoryStats}>
-                    <Typography variant="label" color="text">
-                      ${category.amount.toLocaleString()}
-                    </Typography>
-                    <Typography variant="caption" color="secondary" style={styles.categoryPercent}>
-                      {category.percent}%
-                    </Typography>
-                  </View>
-                  <View style={styles.categoryBarContainer}>
-                    <View 
-                      style={[
-                        styles.categoryBarFill, 
-                        { 
-                          width: `${category.percent}%`,
-                          backgroundColor: category.color,
-                        }
-                      ]} 
-                    />
-                  </View>
-                </View>
-              ))}
+              <View style={styles.ringsContainer}>
+                <MultiRingProgress
+                  size={220}
+                  strokeWidth={14}
+                  ringGap={6}
+                  rings={[
+                    { progress: 0.38, color: colors.primary, label: 'Food' },
+                    { progress: 0.64, color: '#3498DB', label: 'Accommodation' },
+                    { progress: 0.80, color: '#9B59B6', label: 'Transport' },
+                    { progress: 0.93, color: '#E74C3C', label: 'Activities' },
+                    { progress: 1.0, color: '#95A5A6', label: 'Other' },
+                  ]}
+                />
+              </View>
               
-              {/* Top Spender */}
-              <View style={styles.topSpenderCard}>
-                <View style={styles.topSpenderHeader}>
-                  <View style={styles.topSpenderIconBg}>
-                    <Ionicons name="trophy" size={28} color={colors.warning} />
+              {/* Legend */}
+              <View style={styles.legend}>
+                {[
+                  { name: 'Food & Dining', amount: 1247, percent: 38, color: colors.primary },
+                  { name: 'Accommodation', amount: 830, percent: 26, color: '#3498DB' },
+                  { name: 'Transport', amount: 520, percent: 16, color: '#9B59B6' },
+                  { name: 'Activities', amount: 420, percent: 13, color: '#E74C3C' },
+                  { name: 'Other', amount: 230, percent: 7, color: '#95A5A6' },
+                ].map((cat, index) => (
+                  <View key={index} style={styles.legendItem}>
+                    <View style={[styles.legendDot, { backgroundColor: cat.color }]} />
+                    <Typography variant="body" color="text" style={styles.legendName}>
+                      {cat.name}
+                    </Typography>
+                    <Typography variant="label" color="text" style={styles.legendAmount}>
+                      ${cat.amount.toLocaleString()}
+                    </Typography>
+                    <Typography variant="caption" color="secondary">
+                      {cat.percent}%
+                    </Typography>
                   </View>
-                  <View style={styles.topSpenderInfo}>
-                    <Typography variant="caption" color="tertiary">
-                      TOP CONTRIBUTOR
-                    </Typography>
-                    <Typography variant="h2" color="text" style={styles.topSpenderName}>
-                      Sarah
-                    </Typography>
-                    <Typography variant="label" color="warning">
-                      $1,450 • 45% of total
-                    </Typography>
-                  </View>
-                </View>
+                ))}
               </View>
             </View>
             

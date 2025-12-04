@@ -31,6 +31,9 @@ export type { LoadingSpinnerProps, SpinnerSize, SpinnerColor } from './LoadingSp
 export { CircularProgress } from './CircularProgress';
 export type { CircularProgressProps } from './CircularProgress';
 
+export { MultiRingProgress } from './MultiRingProgress';
+export type { MultiRingProgressProps, RingData } from './MultiRingProgress';
+
 export { CustomAlert } from './CustomAlert';
 export type { CustomAlertProps } from './CustomAlert';
 
