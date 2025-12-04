@@ -28,18 +28,19 @@ interface TripCardProps {
   color: string;
 }
 
-const TripCard: React.FC<TripCardProps> = ({
+const TripCard: React.FC<TripCardProps & { onPress: () => void }> = ({
   name,
   location,
   totalSpent,
   budget,
   members,
   color,
+  onPress,
 }) => {
   const progress = totalSpent / budget;
   
   return (
-    <Pressable style={styles.tripCard}>
+    <Pressable style={styles.tripCard} onPress={onPress}>
       <LinearGradient
         colors={[color + '12', color + '03']}
         start={{ x: 0, y: 0 }}
@@ -117,7 +118,7 @@ const TripCard: React.FC<TripCardProps> = ({
 /**
  * Trips Screen Component
  */
-export const PotListScreen: React.FC = () => {
+export const PotListScreen: React.FC<any> = ({ navigation }) => {
   // Mock trips data
   const mockTrips = [
     {
@@ -164,7 +165,11 @@ export const PotListScreen: React.FC = () => {
         {/* Trips List */}
         <View style={styles.tripsList}>
           {mockTrips.map((trip, index) => (
-            <TripCard key={index} {...trip} />
+            <TripCard 
+              key={index} 
+              {...trip} 
+              onPress={() => navigation.navigate('PotDetail', { potId: `trip-${index}` })}
+            />
           ))}
         </View>
         

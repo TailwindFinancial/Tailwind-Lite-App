@@ -18,6 +18,7 @@ import { WelcomeScreen } from '@screens/welcome/WelcomeScreen';
 import { LoginScreen } from '@screens/auth/LoginScreen';
 import { RegisterScreen } from '@screens/auth/RegisterScreen';
 import { ForgotPasswordScreen } from '@screens/auth/ForgotPasswordScreen';
+import { PotDetailScreen } from '@screens/pot/PotDetailScreen';
 import { colors } from '@constants/theme';
 
 /**

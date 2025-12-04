@@ -141,6 +141,29 @@ export const MoreScreen: React.FC = () => {
           />
         </View>
         
+        {/* Financial Section */}
+        <View style={styles.section}>
+          <Typography variant="label" color="tertiary" style={styles.sectionTitle}>
+            FINANCIAL
+          </Typography>
+          
+          <MenuItem
+            icon="repeat-outline"
+            title="Subscriptions"
+            subtitle="Manage recurring payments"
+            onPress={() => {}}
+            iconColor="#9B59B6"
+          />
+          
+          <MenuItem
+            icon="card-outline"
+            title="Payment Methods"
+            subtitle="Linked apps and accounts"
+            onPress={() => {}}
+            iconColor={colors.success}
+          />
+        </View>
+        
         {/* Support Section */}
         <View style={styles.section}>
           <Typography variant="label" color="tertiary" style={styles.sectionTitle}>

@@ -108,15 +108,25 @@ export const MoveMoneyScreen: React.FC = () => {
         {/* Actions Section */}
         <View style={styles.section}>
           <Typography variant="label" color="tertiary" style={styles.sectionTitle}>
-            TRANSFER
+            TRANSFERS
           </Typography>
           
           <View style={styles.actionsContainer}>
             <ActionButton
               icon="swap-horizontal-outline"
               title="Transfer Between Trips"
-              subtitle="Move funds between your trips"
+              subtitle="Move funds across expense groups"
               iconColor={colors.primary}
+              onPress={() => {}}
+            />
+            
+            <View style={styles.actionDivider} />
+            
+            <ActionButton
+              icon="wallet-outline"
+              title="Move to Savings"
+              subtitle="Transfer leftover budget to savings"
+              iconColor="#9B59B6"
               onPress={() => {}}
             />
           </View>
@@ -124,14 +134,14 @@ export const MoveMoneyScreen: React.FC = () => {
         
         <View style={styles.section}>
           <Typography variant="label" color="tertiary" style={styles.sectionTitle}>
-            SETTLE & REQUEST
+            SETTLEMENTS
           </Typography>
           
           <View style={styles.actionsContainer}>
             <ActionButton
               icon="people-outline"
               title="Settle with Friends"
-              subtitle="Pay back what you owe"
+              subtitle="Pay back what you owe via Venmo/Zelle"
               iconColor={colors.success}
               onPress={() => {}}
             />
@@ -140,8 +150,8 @@ export const MoveMoneyScreen: React.FC = () => {
             
             <ActionButton
               icon="cash-outline"
-              title="Request Money"
-              subtitle="Request payment from friends"
+              title="Request Payment"
+              subtitle="Send payment requests to friends"
               iconColor={colors.info}
               onPress={() => {}}
             />
@@ -149,10 +159,36 @@ export const MoveMoneyScreen: React.FC = () => {
             <View style={styles.actionDivider} />
             
             <ActionButton
-              icon="card-outline"
-              title="Payment Methods"
-              subtitle="Manage linked payment apps"
+              icon="analytics-outline"
+              title="View Settlement History"
+              subtitle="Track past payments"
               iconColor={colors.warning}
+              onPress={() => {}}
+            />
+          </View>
+        </View>
+        
+        <View style={styles.section}>
+          <Typography variant="label" color="tertiary" style={styles.sectionTitle}>
+            PAYMENT APPS
+          </Typography>
+          
+          <View style={styles.actionsContainer}>
+            <ActionButton
+              icon="card-outline"
+              title="Link Payment Apps"
+              subtitle="Connect Venmo, Zelle, PayPal"
+              iconColor="#3498DB"
+              onPress={() => {}}
+            />
+            
+            <View style={styles.actionDivider} />
+            
+            <ActionButton
+              icon="link-outline"
+              title="Generate Payment Link"
+              subtitle="Share link for easy settlement"
+              iconColor="#E74C3C"
               onPress={() => {}}
             />
           </View>

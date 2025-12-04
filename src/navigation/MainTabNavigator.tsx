@@ -20,7 +20,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { MainTabParamList } from '@types';
 import { DashboardScreen } from '@screens/dashboard/DashboardScreen';
-import { PotListScreen } from '@screens/pot/PotListScreen';
+import { TripsNavigator } from './TripsNavigator';
 import { MessagesScreen } from '@screens/messages/MessagesScreen';
 import { MoveMoneyScreen } from '@screens/movemoney/MoveMoneyScreen';
 import { MoreScreen } from '@screens/more/MoreScreen';
@@ -175,9 +175,10 @@ export const MainTabNavigator: React.FC = () => {
         {/* Trips Tab */}
         <Tab.Screen
           name="Trips"
-          component={PotListScreen}
+          component={TripsNavigator}
           options={{
             title: 'Trips',
+            headerShown: false,
             tabBarIcon: ({ color, size, focused }) => (
               <Ionicons 
                 name={focused ? 'airplane' : 'airplane-outline'} 

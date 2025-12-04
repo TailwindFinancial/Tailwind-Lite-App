@@ -181,36 +181,82 @@ export const DashboardScreen: React.FC = () => {
           </View>
         </View>
         
-        {/* Stats Grid - BEAUTIFUL */}
+        {/* Stats Grid - EXECUTIVE & SYMMETRICAL */}
         <View style={styles.statsSection}>
           <View style={styles.statsRow}>
-            <StatCard
-              icon="calendar-outline"
-              label="This Month"
-              value="$1,247"
-              color={colors.primary}
-              trend="+12.5%"
-            />
-            <StatCard
-              icon="trending-up-outline"
-              label="Avg Per Day"
-              value="$41"
-              color={colors.success}
-            />
+            <View style={styles.executiveStat}>
+              <View style={[styles.execStatIcon, { backgroundColor: colors.primary + '15' }]}>
+                <Ionicons name="calendar" size={28} color={colors.primary} />
+              </View>
+              <Typography variant="caption" color="tertiary" align="center" style={styles.execLabel}>
+                THIS MONTH
+              </Typography>
+              <Typography variant="h1" color="text" align="center" style={styles.execValue}>
+                $1,247
+              </Typography>
+              <View style={styles.execTrend}>
+                <Ionicons name="trending-up" size={14} color={colors.success} />
+                <Typography variant="caption" color="success" style={styles.execTrendText}>
+                  +12.5%
+                </Typography>
+              </View>
+            </View>
+            
+            <View style={styles.executiveStat}>
+              <View style={[styles.execStatIcon, { backgroundColor: colors.success + '15' }]}>
+                <Ionicons name="flash" size={28} color={colors.success} />
+              </View>
+              <Typography variant="caption" color="tertiary" align="center" style={styles.execLabel}>
+                AVG PER DAY
+              </Typography>
+              <Typography variant="h1" color="text" align="center" style={styles.execValue}>
+                $41
+              </Typography>
+              <View style={styles.execTrend}>
+                <Ionicons name="remove" size={14} color={colors.textTertiary} />
+                <Typography variant="caption" color="tertiary" style={styles.execTrendText}>
+                  Steady
+                </Typography>
+              </View>
+            </View>
           </View>
+          
           <View style={styles.statsRow}>
-            <StatCard
-              icon="airplane-outline"
-              label="Active Trips"
-              value="3"
-              color={colors.info}
-            />
-            <StatCard
-              icon="people-outline"
-              label="Friends"
-              value="12"
-              color={colors.warning}
-            />
+            <View style={styles.executiveStat}>
+              <View style={[styles.execStatIcon, { backgroundColor: colors.info + '15' }]}>
+                <Ionicons name="airplane" size={28} color={colors.info} />
+              </View>
+              <Typography variant="caption" color="tertiary" align="center" style={styles.execLabel}>
+                ACTIVE TRIPS
+              </Typography>
+              <Typography variant="h1" color="text" align="center" style={styles.execValue}>
+                3
+              </Typography>
+              <View style={styles.execTrend}>
+                <Ionicons name="add" size={14} color={colors.info} />
+                <Typography variant="caption" color="info" style={styles.execTrendText}>
+                  2 this month
+                </Typography>
+              </View>
+            </View>
+            
+            <View style={styles.executiveStat}>
+              <View style={[styles.execStatIcon, { backgroundColor: colors.warning + '15' }]}>
+                <Ionicons name="people" size={28} color={colors.warning} />
+              </View>
+              <Typography variant="caption" color="tertiary" align="center" style={styles.execLabel}>
+                FRIENDS
+              </Typography>
+              <Typography variant="h1" color="text" align="center" style={styles.execValue}>
+                12
+              </Typography>
+              <View style={styles.execTrend}>
+                <Ionicons name="checkmark" size={14} color={colors.success} />
+                <Typography variant="caption" color="success" style={styles.execTrendText}>
+                  All active
+                </Typography>
+              </View>
+            </View>
           </View>
         </View>
         
@@ -395,29 +441,40 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    gap: spacing.sm,
-    marginBottom: spacing.sm,
+    gap: spacing.base,
+    marginBottom: spacing.base,
   },
-  statCard: {
+  executiveStat: {
+    flex: 1,
     backgroundColor: colors.surface,
-    borderRadius: borderRadius.lg,
-    padding: spacing.base,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
     borderWidth: 1,
     borderColor: colors.border,
+    alignItems: 'center',
   },
-  statIconBg: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+  execStatIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.base,
   },
-  statLabel: {
-    marginBottom: 4,
+  execLabel: {
+    marginBottom: spacing.xs,
+    letterSpacing: 0.5,
   },
-  statValue: {
-    marginTop: 2,
+  execValue: {
+    marginBottom: spacing.xs,
+  },
+  execTrend: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  execTrendText: {
+    fontSize: 11,
   },
   section: {
     paddingHorizontal: spacing.lg,
