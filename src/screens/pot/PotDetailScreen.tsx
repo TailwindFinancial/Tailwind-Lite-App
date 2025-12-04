@@ -867,6 +867,41 @@ const styles = StyleSheet.create({
   bottomSpacer: {
     height: 140,
   },
+  ringsCard: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.xl,
+    padding: spacing.xl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: spacing.base,
+  },
+  ringsTitle: {
+    marginBottom: spacing.lg,
+  },
+  ringsContainer: {
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+  },
+  legend: {
+    gap: spacing.sm,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.xs,
+  },
+  legendDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: spacing.sm,
+  },
+  legendName: {
+    flex: 1,
+  },
+  legendAmount: {
+    marginRight: spacing.base,
+  },
 });
 
 export default PotDetailScreen;
